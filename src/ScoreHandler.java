@@ -4,7 +4,6 @@ public class ScoreHandler {
 
     private BufferedWriter bw;
     private FileWriter fw;
-    private String fName;
 
     public ScoreHandler(){
 
@@ -26,8 +25,8 @@ public class ScoreHandler {
 
         finally{
             try {
-                fw.close();
                 bw.close();
+                fw.close();
             }
             catch(IOException e){
                 System.out.println("Sorry, error happened!");
