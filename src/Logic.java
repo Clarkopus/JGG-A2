@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /* The logic class is used to deal with all game based logic such
  * as movement, object spawning, score keeping and other important
   * game based logic*/
 
 public class Logic {
-    int score;                                                                                                          // Score variable for keeping player score
+    int score;
+    // Score variable for keeping player score
     Square player;
     Application app;
     // Used to keep track of all objects inside the list
@@ -30,7 +32,7 @@ public class Logic {
     }
 
     public void addObject(Shape s){
-                                                                                                                        // Set the shape to be set at its own cords
+        // Set the shape to be set at its own cords
         cords[s.xCord][s.yCord] = s;
     }
 
@@ -65,7 +67,6 @@ public class Logic {
                     continue;
                 }
             }
-
             yCord+=40;
             xCord =0;
         }
@@ -135,6 +136,7 @@ public class Logic {
             if(!check) {
                 checkGameState();
             }
+            moveMobs();
             app.repaintThings();
 
         }
@@ -148,20 +150,21 @@ public class Logic {
         int yPos =0;
         int xPos = 0;
         boolean posOcupied =true;
-
-        for(int i=0; i<amountToSpawn;i++){                                                                              // Loop as many times as the condition allows
+        // Loop as many times as the condition allows
+        for(int i=0; i<amountToSpawn;i++){
+            // Keep generating numbers until they are less than 20
             while(posOcupied){
-                                                                                                                        // Keep generating numbers until they are less than 20
                 xPos = generateRandCord();
                 yPos = generateRandCord();
                 System.out.println("cord: " + xPos);
-
-                Circle mob = new Circle(40, xPos, yPos);                                                         // Create a mob object at the random position
-                if(cords[xPos][yPos] != null){                                                                          // If the position at the cords isn't free, re-do the loop
+                // Create a mob object at the random position
+                Circle mob = new Circle(40, xPos, yPos);
+                // If the position at the cords isn't free, re-do the loop
+                if(cords[xPos][yPos] != null){
                     continue;
                 }
-
-                else {                                                                                                  // Else, add the new object to both the cords and the Object list
+                // Else, add the new object to both the cords and the Object list
+                else {
                     objectList.add(mob);
                     addObject(mob);
                     posOcupied = false;
@@ -192,13 +195,29 @@ public class Logic {
     }
     /* This method is used to move a mob every time the player moves
     * */
-    private void moveMobs(ArrayList<Shape> slist){
-
-        for(Shape s: slist){
+    private void moveMobs(){
+        Random rng = new Random();
+        for(Shape s: objectList){
             if(s instanceof Circle){
                 int oldX = s.xCord;
                 int oldY = s.yCord;
+                int newX = oldX + rng.nextInt(2);
+                int newY = oldY +  rng.nextInt(2);
+                while(true) {
 
+                    if(s.xCord <20 && s.yCord < 20){
+                        if(newX <20 && newY<20) {
+
+                            s.xCord = newX;
+                            s.yCord = newY;
+                            cords[oldX][oldY] = null;
+                            addObject(s);
+                            break;
+                        }
+                        else break;
+                    }
+
+                }
 
             }
         }
@@ -209,6 +228,8 @@ public class Logic {
             System.out.println("No mobs dected on screen, ending game!");
             sc.addScore("Player", app.currentScore.getText());
             check = true;
+            JOptionPane.showMessageDialog(new JButton(),"You win!");
+            new HighScoreFrame(this.app);
         }
     }
 
@@ -218,7 +239,7 @@ public class Logic {
             double posRand;
             posRand = Math.random() * 20 + 1;
             cord = (int) posRand;
-            if(cord <20){
+            if(cord <19){
                 return cord;
             }
         }

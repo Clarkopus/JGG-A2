@@ -1,10 +1,7 @@
-import sun.applet.AppletListener;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.EventListener;
 
 // Application class used to store all UI code
 public class Application extends JFrame {
@@ -15,6 +12,7 @@ public class Application extends JFrame {
     JTextField currentScore;
     JLabel scoreLabel;
     JButton start;
+    JButton highScoreBut;
     private Thread T;
     private String threadName = "graphics_T";
 
@@ -33,7 +31,9 @@ public class Application extends JFrame {
         // JButtons go here
         reset = new JButton("Reset");
         start = new JButton("Start");
-        start.addActionListener(new buttonHandler(this));
+        start.addActionListener(new ButtonHandler(this));
+        highScoreBut = new JButton("High Scores");
+        highScoreBut.addActionListener(new ButtonHandler(this));
         // JLables go here
         scoreLabel = new JLabel("Current high score");
         // JTextfield/JTextArea go here
@@ -47,6 +47,7 @@ public class Application extends JFrame {
         gameControlPanel.add(currentScore);
         gameControlPanel.add(reset);
         gameControlPanel.add(start);
+        gameControlPanel.add(highScoreBut);
         //JFrame adding goes here
         add(squareGridPanel);
         add(gameControlPanel,BorderLayout.SOUTH);
@@ -58,17 +59,24 @@ public class Application extends JFrame {
         }
 }
 
-class buttonHandler implements ActionListener{
+class ButtonHandler implements ActionListener{
     Application app;
-    public buttonHandler(Application app){
+    public ButtonHandler(Application app){
         this.app = app;
     }
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
+        if(actionEvent.getActionCommand().equals("Start")) {
+            app.squareGridPanel.gameStarted = true;
+            app.setFocusable(true);
+            app.requestFocus();
+            app.repaintThings();
+        }
 
-        app.squareGridPanel.gameStarted = true;
-        app.setFocusable(true);
-        app.requestFocus();
-        app.repaintThings();
+        else if(actionEvent.getActionCommand().equals("High Scores")){
+            new HighScoreFrame(app);
+        }
+
     }
 }
+
