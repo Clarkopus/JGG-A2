@@ -1,2 +1,5 @@
 Player: 7
 Player: 6
+Guy: 4
+Charlie: 25
+Lisa: 5

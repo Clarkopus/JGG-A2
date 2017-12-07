@@ -13,7 +13,6 @@ public class HighScoreFrame extends JFrame {
         this.app = app;
 
         setSize(400,700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("High Score screen");
         generateScores();
         setVisible(true);
